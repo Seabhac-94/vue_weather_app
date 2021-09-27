@@ -3,12 +3,12 @@
         {{welcome}}
     </h1>
     <div>
-        <form action="" method="get"></form>
-        <p>To get started, type in the region, town or city you'd like to see the weather: <input type="text" v-model="location"></p>
+        <p>To get started, type in the region, town or city you'd like to see the weather: <input type="text" v-bind:value="location"></p>
         <button @click="getWeather()">Get Weather</button>
         <p>
         {{data}}
         </p>
+        <img v-bind:src="icon" alt="" srcset="">
     </div>
 </template>
 
@@ -29,20 +29,29 @@ export default {
           key: 'key='+process.env.VUE_APP_API_KEY,
           data: null,
           location: '',
-          aqi: 'yes'
+          aqi: 'yes',
+          icon: ''
       }
   },
   mounted() {
-
-  },
+      axios.get('http://ipwhois.app/json/')
+        .then(response => {
+            this.ipData = response.data
+            console.log(this.ipData)
+            this.location = this.ipData.country
+            this.getWeather()
+        })
+},
   methods: {
       getWeather(){
       axios.post(this.baseUrl+this.apiMethod+'?'+this.key+'&'+'q='+this.location+'&'+'aqi='+this.aqi)
         .then(response => {
             this.data = response.data
             console.log(this.data)
+            this.icon = this.data.current.condition.icon
+            console.log(this.icon)
         })
-      }
+      },
   }
 }
 </script>

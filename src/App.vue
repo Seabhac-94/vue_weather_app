@@ -1,5 +1,7 @@
 <template>
   <WeatherApp />
+
+  <footer>Powered by <a href="https://www.weatherapi.com/" title="Free Weather API" target="_blank">WeatherAPI.com</a></footer>
 </template>
 
 <script>
