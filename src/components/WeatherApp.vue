@@ -8,7 +8,7 @@
         <p>
         {{data}}
         </p>
-        <img v-bind:src="icon" alt="" srcset="">
+        <img v-bind:src="icon" alt="Weather Icon" srcset="">
     </div>
 </template>
 
@@ -37,7 +37,7 @@ export default {
       axios.get('http://ipwhois.app/json/')
         .then(response => {
             this.ipData = response.data
-            console.log(this.ipData)
+            console.log(this.ipData) // needed for now, will use it for other data
             this.location = this.ipData.country
             this.getWeather()
         })
@@ -49,7 +49,6 @@ export default {
             this.data = response.data
             console.log(this.data)
             this.icon = this.data.current.condition.icon
-            console.log(this.icon)
         })
       },
   }
