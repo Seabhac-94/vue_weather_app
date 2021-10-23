@@ -3,10 +3,10 @@
         {{welcome}}
     </h1>
     <div>
-        <p>To get started, type in the region, town or city you'd like to see the weather: <input type="text" v-bind:value="location"></p>
+        <p>To get started, type in the region, town or city you'd like to see the weather: <input name="inputLocation" v-model="location" type="text" /></p>
         <button @click="getWeather()">Get Weather</button>
         <p>
-        {{data}}
+            {{ tempC }} / {{ selectedLocation }} / {{ conditionDescription }}
         </p>
         <img v-bind:src="icon" alt="Weather Icon" srcset="">
     </div>
@@ -30,7 +30,11 @@ export default {
           data: null,
           location: '',
           aqi: 'yes',
-          icon: ''
+          tempC: '',
+          icon: '',
+          conditionDescription: '',
+          selectedLocation: ''
+
       }
   },
   mounted() {
@@ -38,17 +42,27 @@ export default {
         .then(response => {
             this.ipData = response.data
             console.log(this.ipData) // needed for now, will use it for other data
-            this.location = this.ipData.country
+            this.location = this.ipData.city
             this.getWeather()
         })
 },
   methods: {
       getWeather(){
+      this.selectedLocation = this.location
       axios.post(this.baseUrl+this.apiMethod+'?'+this.key+'&'+'q='+this.location+'&'+'aqi='+this.aqi)
         .then(response => {
             this.data = response.data
             console.log(this.data)
-            this.icon = this.data.current.condition.icon
+            this.current = this.data.current
+            this.condition = this.current.condition
+            this.tempC = this.current.temp_c
+            this.conditionDescription = this.condition.text
+            this.icon = this.condition.icon
+            // for (let index = 0; index < this.data.length; index++) {
+            //     this.element = this.data[index];
+            //     console.log(this.element[1])
+
+            // }
         })
       },
   }
